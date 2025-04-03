@@ -1,4 +1,4 @@
-package model.request;
+package com.leang.springminiproject.model.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,9 +1,9 @@
-package model.entity;
+package com.leang.springminiproject.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import model.response.AppUserReponse;
+import com.leang.springminiproject.model.response.AppUserReponse;
 
 import java.time.Instant;
 import java.util.UUID;

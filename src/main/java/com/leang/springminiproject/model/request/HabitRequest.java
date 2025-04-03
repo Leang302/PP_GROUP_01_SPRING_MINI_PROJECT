@@ -1,18 +1,14 @@
-package model.entity;
+package com.leang.springminiproject.model.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Achievement {
-    private UUID achievementId;
+public class HabitRequest {
     private String title;
     private String description;
-    private String badge;
-    private Integer xpRequired;
+    private String frequency;
 }
