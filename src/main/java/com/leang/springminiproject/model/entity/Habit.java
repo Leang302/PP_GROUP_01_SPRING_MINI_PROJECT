@@ -3,7 +3,7 @@ package com.leang.springminiproject.model.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.leang.springminiproject.model.response.AppUserReponse;
+import com.leang.springminiproject.model.response.AppUserResponse;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -17,6 +17,6 @@ public class Habit {
     private String description;
     private String frequency;
     private Boolean isActive;
-    private AppUserReponse appUserReponse;
+    private AppUserResponse appUserReponse;
     private Instant createdAt;
 }
