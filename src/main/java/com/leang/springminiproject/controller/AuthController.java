@@ -3,19 +3,21 @@ package com.leang.springminiproject.controller;
 import com.leang.springminiproject.jwt.JwtService;
 import com.leang.springminiproject.model.request.AppUserRequest;
 import com.leang.springminiproject.model.request.AuthRequest;
+import com.leang.springminiproject.model.response.ApiResponse;
 import com.leang.springminiproject.model.response.AuthResponse;
 import com.leang.springminiproject.service.AppUserService;
+import com.leang.springminiproject.service.OtpService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/auths")
@@ -24,6 +26,7 @@ public class AuthController {
     private final AppUserService appUserService;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final OtpService emailService;
 
     private void authenticate(String email, String password) throws Exception {
         try {
@@ -36,7 +39,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticate(@RequestBody AuthRequest request) throws Exception {
+    public ResponseEntity<?> authenticate(@RequestBody @Valid AuthRequest request) throws Exception {
         authenticate(request.getIdentifier(), request.getPassword());
         final UserDetails userDetails = appUserService.loadUserByUsername(request.getIdentifier());
         final String token = jwtService.generateToken(userDetails);
@@ -45,7 +48,21 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody AppUserRequest request){
-        return ResponseEntity.ok(appUserService.register(request));
+    public ResponseEntity<?> register(@RequestBody @Valid AppUserRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.builder().success(true).message("User registered successfully").status(HttpStatus.CREATED).payload(appUserService.register(request)).build());
+    }
+
+    @PostMapping("/verify")
+    public ResponseEntity<?> verifyEmailWithOTP(@RequestParam String email, @RequestParam String otp) {
+        emailService.verifyOTP(email, otp);
+        return ResponseEntity.ok(ApiResponse.builder().success(true).message("Email successfully verified! You can now log in.")
+                .status(HttpStatus.CREATED).build());
+    }
+
+    @SneakyThrows
+    @PostMapping("/resend")
+    public ResponseEntity<?> resendOTP(@RequestParam String email) {
+        emailService.sendOtp(email);
+        return ResponseEntity.ok(ApiResponse.builder().success(true).message("Verification OTP successfully resent to your email.").status(HttpStatus.OK).build());
     }
 }

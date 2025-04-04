@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Code</title>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+        .container {
+            width: 80%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        p {
+            font-size: 16px;
+            padding: 20px;
+            background-color: whitesmoke;
+        }
+.message{
+    background-color: transparent;
+    width: 500px;
+    text-align: center;
+}
+        .otp-code {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .expiry {background-color: transparent;
+            font-style: italic;
+            color: #888;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <h2>Gamified Habit Tracker</h2>
+    <p class="message">Before you sign in, we need to identify your identity enter the following code in the Signin page</p>
+    <p>Your OTP code is: <span class="otp-code" th:text="${otp}">123456</span></p>
+    <p class="expiry">This code will expire in 5 minutes.</p>
+    <p class="message">Welcome to Gamified Habit Tracker Application. Here, you can monitor your expenses and manage your budget effectively</p>
+</div>
+</body>
+
+</html>
