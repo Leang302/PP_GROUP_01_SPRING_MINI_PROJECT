@@ -1,9 +1,8 @@
 package com.leang.springminiproject.service.impl;
 
 
-import com.leang.springminiproject.model.entity.AppUser;
+import com.leang.springminiproject.model.entity.Profile;
 import com.leang.springminiproject.model.request.AppUserRequest;
-import com.leang.springminiproject.model.response.AppUserResponse;
 import com.leang.springminiproject.repository.AppUserRepository;
 import com.leang.springminiproject.service.AppUserService;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +25,10 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public AppUserResponse register(AppUserRequest request) {
+    public Profile register(AppUserRequest request) {
         request.setPassword(passwordEncoder.encode(request.getPassword()));
-        AppUser appUser = appUserRepository.register(request);
-        return modelMapper.map(appUserRepository.getUserById(appUser.getAppUserId()), AppUserResponse.class);
+        //        return modelMapper.map(appUserRepository.getUserById(appUser.getAppUserId()), Profile.class);
+        return appUserRepository.register(request);
     }
+
 }
