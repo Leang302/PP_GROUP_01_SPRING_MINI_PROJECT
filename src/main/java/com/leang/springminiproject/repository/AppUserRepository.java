@@ -6,6 +6,7 @@ import com.leang.springminiproject.model.entity.Profile;
 import com.leang.springminiproject.model.request.AppUserRequest;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.UUID;
 
@@ -13,19 +14,19 @@ import java.util.UUID;
 public interface AppUserRepository {
 
     @Results(id = "appUserMapper", value = {
-            @Result(property = "appUserId", column = "app_user_id",javaType = UUID.class, jdbcType = JdbcType.OTHER, typeHandler = UUIDTypeHandler.class),
+            @Result(property = "appUserId", column = "app_user_id", javaType = UUID.class, jdbcType = JdbcType.OTHER, typeHandler = UUIDTypeHandler.class),
             @Result(property = "profileImageUrl", column = "profile_image"),
             @Result(property = "isVerified", column = "is_verified"),
             @Result(property = "createdAt", column = "created_at")
     })
     @Select("""
                 SELECT * FROM app_users
-                WHERE email = #{email};
+                WHERE email = #{email} or username=#{identifier};
             """)
-    AppUser getUserByEmail(String email);
+    AppUser getUserByIdentifier(String identifier);
 
     @Results(id = "profileMapper", value = {
-            @Result(property = "appUserId", column = "app_user_id",javaType = UUID.class, jdbcType = JdbcType.OTHER, typeHandler = UUIDTypeHandler.class),
+            @Result(property = "appUserId", column = "app_user_id", javaType = UUID.class, jdbcType = JdbcType.OTHER, typeHandler = UUIDTypeHandler.class),
             @Result(property = "profileImageUrl", column = "profile_image"),
             @Result(property = "isVerified", column = "is_verified"),
             @Result(property = "createdAt", column = "created_at")
@@ -37,6 +38,10 @@ public interface AppUserRepository {
             """)
     Profile register(@Param("request") AppUserRequest request);
 
+    @Select("""
+                UPDATE  app_users set is_verified =true where email=#{email};
+            """)
+    void verifyUser(String email);
 
     @ResultMap("appUserMapper")
     @Select("""
