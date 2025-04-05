@@ -17,55 +17,55 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class FileServiceImpl implements FileService {
-	private final MinioClient minioClient;
+    private final MinioClient minioClient;
 
-	@Value("${minio.bucket.name}")
-	private String bucketName;
+    @Value("${minio.bucket.name}")
+    private String bucketName;
 
-	@SneakyThrows
-	@Override
-	public FileMetaData saveFile(MultipartFile file) {
+    @SneakyThrows
+    @Override
+    public FileMetaData saveFile(MultipartFile file) {
+        System.out.println("ran");
+        boolean bucketExits = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
 
-		boolean bucketExits = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
+        if (!bucketExits) {
+            minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
+        }
 
-		if (!bucketExits) {
-			minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
-		}
+        String fileName = file.getOriginalFilename();
 
-		String fileName = file.getOriginalFilename();
+        fileName = UUID.randomUUID() + "." + StringUtils.getFilenameExtension(fileName);
 
-		fileName = UUID.randomUUID() + "." + StringUtils.getFilenameExtension(fileName);
+        minioClient.putObject(
+                PutObjectArgs.builder()
+                        .bucket(bucketName)
+                        .object(fileName)
+                        .contentType(file.getContentType())
+                        .stream(file.getInputStream(), file.getSize(), -1)
+                        .build()
+        );
 
-		minioClient.putObject(
-				PutObjectArgs.builder()
-						.bucket(bucketName)
-						.object(fileName)
-						.contentType(file.getContentType())
-						.stream(file.getInputStream(), file.getSize(), -1)
-						.build()
-		);
+        String fileUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/v1/files/preview-file/" + fileName)
+                .toUriString();
 
-		String fileUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
-				.path("/api/v1/files/preview-file/" + fileName)
-				.toUriString();
+        return FileMetaData.builder()
+                .fileName(fileName)
+                .fileUrl(fileUrl)
+                .fileType(file.getContentType())
+                .fileSize(file.getSize())
+                .build();
+    }
 
-		return FileMetaData.builder()
-				.fileName(fileName)
-				.fileUrl(fileUrl)
-				.fileType(file.getContentType())
-				.fileSize(file.getSize())
-				.build();
-	}
-
-	@SneakyThrows
-	@Override
-	public InputStream getFileByFileName(String fileName) {
-		return minioClient.getObject(
-				GetObjectArgs.builder()
-						.bucket(bucketName)
-						.object(fileName)
-						.build()
-		);
-	}
+    @SneakyThrows
+    @Override
+    public InputStream getFileByFileName(String fileName) {
+        return minioClient.getObject(
+                GetObjectArgs.builder()
+                        .bucket(bucketName)
+                        .object(fileName)
+                        .build()
+        );
+    }
 
 }
