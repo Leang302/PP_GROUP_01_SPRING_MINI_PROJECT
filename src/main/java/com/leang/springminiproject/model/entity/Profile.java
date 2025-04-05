@@ -13,10 +13,10 @@ import java.util.UUID;
 public class Profile {
     private UUID appUserId;
     private String username;
-    private String password;
     private String email;
     private Integer level;
     private Integer xp;
+    private String profileImageUrl;
     private Boolean isVerified;
     private Instant createdAt;
 }
