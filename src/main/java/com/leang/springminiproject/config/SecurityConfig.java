@@ -48,8 +48,6 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/swagger-ui.html"
                         ).permitAll()
-                        .requestMatchers("/api/v1/books").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers("/api/v1/movies").hasAnyAuthority("ROLE_ADMIN","ROLE_USER")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthEntrypoint))

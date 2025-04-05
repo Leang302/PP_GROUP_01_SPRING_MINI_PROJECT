@@ -11,13 +11,13 @@ create table if not exists achievements
 create table if not exists app_users
 (
     app_user_id   uuid primary key DEFAULT uuid_generate_v4(),
-    username      varchar(255) not null,
+    username      varchar(255) not null unique ,
     email         varchar(255) not null unique ,
     password      varchar(255) not null,
     level         integer      default 1,
     xp            integer      default 0,
     profile_image varchar(255),
-    is_verified   boolean      default true,
+    is_verified   boolean      default false,
     created_at     timestamptz default now()
 );
 create table if not exists app_user_achievements

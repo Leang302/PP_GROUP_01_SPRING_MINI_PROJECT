@@ -1,5 +1,6 @@
 package com.leang.springminiproject.model.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,10 +13,12 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ApiResponse <T>{
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class ApiResponse<T> {
     private Boolean success;
     private String message;
     private HttpStatus status;
     private T payload;
-    private Instant timestamps;
+    @Builder.Default
+    private Instant timestamps = Instant.now();
 }
