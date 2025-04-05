@@ -1,6 +1,7 @@
 package com.leang.springminiproject.exception;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.validation.FieldError;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
+import javax.naming.AuthenticationException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -76,12 +78,37 @@ public class GlobalExceptionHandler {
         // Create structured ProblemDetail response
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
         problemDetail.setTitle("Method Parameter Validation Failed");
-        problemDetail.setProperties(Map.of(
-                "timestamp", LocalDateTime.now(),
-                "errors", errors // Attach validation errors
+        problemDetail.setProperties(Map.of("timestamp", LocalDateTime.now(), "errors", errors // Attach validation errors
         ));
 
         return problemDetail;
     }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ProblemDetail handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+        Throwable rootCause = ex.getRootCause();
+        String detailMessage = "Data integrity violation.";
+        HttpStatus status = HttpStatus.CONFLICT;
+        Map<String, String> fields = new HashMap<>();
+
+
+        String message = rootCause.getMessage();
+
+        if (message.contains("app_users_email_key")) {
+            fields.put("email", "Email has already existed.");
+        }
+        if (message.contains("app_users_username_key")) {
+            fields.put("name", "Name has already been taken.");
+        }
+
+
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(status, detailMessage);
+        problem.setTitle("Duplicate Field");
+
+        problem.setProperty("fields", fields);
+
+        return problem;
+    }
+
 
 }
