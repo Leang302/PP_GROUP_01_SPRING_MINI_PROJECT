@@ -1,0 +1,1 @@
+INSERT INTO habits VALUES (default,'String','String', 'DAILY','true','5afdd9ce-0a3e-4db9-8b8d-88f1a22da995','2025-04-05 08:45:08.190585 +00:00');
