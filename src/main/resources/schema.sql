@@ -45,3 +45,6 @@ create table if not exists habit_logs
     xp_earned   integer  not null,
     habit_id uuid not null references habits(habit_id)
 );
+
+
+
