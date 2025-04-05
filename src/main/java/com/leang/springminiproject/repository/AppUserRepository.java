@@ -14,7 +14,7 @@ import java.util.UUID;
 public interface AppUserRepository {
 
     @Results(id = "appUserMapper", value = {
-            @Result(property = "appUserId", column = "app_user_id", javaType = UUID.class, jdbcType = JdbcType.OTHER, typeHandler = UUIDTypeHandler.class),
+            @Result(property = "appUserId", column = "app_user_id"),
             @Result(property = "profileImageUrl", column = "profile_image"),
             @Result(property = "isVerified", column = "is_verified"),
             @Result(property = "createdAt", column = "created_at")
@@ -51,7 +51,7 @@ public interface AppUserRepository {
     @Select("""
                 UPDATE  app_users set username=#{request.username},profile_image=#{request.profileImageUrl} where app_user_id=#{userId} returning *;
             """)
-    Profile updateAppUser(@Param("userId") UUID userId,@Param("request") ProfileRequest request);
+    Profile updateAppUser(@Param("userId") UUID userId, @Param("request") ProfileRequest request);
 
 
     @Delete("""
