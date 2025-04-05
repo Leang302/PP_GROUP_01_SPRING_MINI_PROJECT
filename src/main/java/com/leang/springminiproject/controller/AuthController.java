@@ -1,6 +1,7 @@
 package com.leang.springminiproject.controller;
 
 import com.leang.springminiproject.jwt.JwtService;
+import com.leang.springminiproject.model.entity.Profile;
 import com.leang.springminiproject.model.request.AppUserRequest;
 import com.leang.springminiproject.model.request.AuthRequest;
 import com.leang.springminiproject.model.response.ApiResponse;
@@ -44,7 +45,13 @@ public class AuthController {
         final UserDetails userDetails = appUserService.loadUserByUsername(request.getIdentifier());
         final String token = jwtService.generateToken(userDetails);
         AuthResponse authResponse = new AuthResponse(token);
-        return ResponseEntity.ok(authResponse);
+        return ResponseEntity.ok().body(
+                ApiResponse.builder().
+                        success(true)
+                        .message("User registered successfully")
+                        .status(HttpStatus.OK)
+                        .payload(authResponse).build()
+        );
     }
 
     @PostMapping("/register")

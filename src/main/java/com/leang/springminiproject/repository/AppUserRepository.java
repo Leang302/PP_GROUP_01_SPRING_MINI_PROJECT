@@ -4,9 +4,9 @@ import com.leang.springminiproject.config.UUIDTypeHandler;
 import com.leang.springminiproject.model.entity.AppUser;
 import com.leang.springminiproject.model.entity.Profile;
 import com.leang.springminiproject.model.request.AppUserRequest;
+import com.leang.springminiproject.model.request.ProfileRequest;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
-import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.UUID;
 
@@ -43,10 +43,19 @@ public interface AppUserRepository {
             """)
     void verifyUser(String email);
 
-    @ResultMap("appUserMapper")
+    @ResultMap("profileMapper")
+    @Select("SELECT * FROM app_users WHERE app_user_id = #{userId}")
+    Profile getUserById(@Param("userId") UUID userId);
+
+    @ResultMap("profileMapper")
     @Select("""
-                SELECT * FROM app_users
-                WHERE app_user_id = #{userId}
+                UPDATE  app_users set username=#{request.username},profile_image=#{request.profileImageUrl} where app_user_id=#{userId} returning *;
             """)
-    Profile getUserById(UUID userId);
+    Profile updateAppUser(@Param("userId") UUID userId,@Param("request") ProfileRequest request);
+
+
+    @Delete("""
+                delete from  app_users where app_user_id=#{userId};
+            """)
+    void deleteAppUser(@Param("userId") UUID userId);
 }
