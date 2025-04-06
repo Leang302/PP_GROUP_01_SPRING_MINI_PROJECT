@@ -35,5 +35,4 @@ public class ProfileServiceImpl implements ProfileService {
         appUserRepository.deleteAppUser(userId);
     }
 
-
 }

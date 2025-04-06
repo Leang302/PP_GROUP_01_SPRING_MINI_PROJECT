@@ -13,8 +13,17 @@ import org.springframework.web.method.annotation.HandlerMethodValidationExceptio
 import javax.naming.AuthenticationException;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+
+import org.springframework.http.converter.HttpMessageNotReadableException;
+
+import java.util.Arrays;
+
 
 @Slf4j
 @ControllerAdvice
@@ -107,6 +116,40 @@ public class GlobalExceptionHandler {
 
         problem.setProperty("fields", fields);
 
+        return problem;
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ProblemDetail handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
+        Throwable cause = ex.getCause();
+
+        if (cause instanceof InvalidFormatException invalidFormatEx) {
+            // Check if the cause is specifically an Enum type error
+            Class<?> targetType = invalidFormatEx.getTargetType();
+
+            if (targetType.isEnum()) {
+                Object[] enumConstants = targetType.getEnumConstants();
+                String allowedValues = Arrays.stream(enumConstants)
+                        .map(Object::toString)
+                        .collect(Collectors.joining(", "));
+
+                String invalidValue = String.valueOf(invalidFormatEx.getValue());
+
+                // Create a ProblemDetail with the custom error message
+                ProblemDetail problem = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+                problem.setTitle("Bad Request");
+                problem.setDetail(String.format("JSON parse error: Cannot deserialize value of type '%s' from String \"%s\": not one of the values accepted for Enum class: [%s]",
+                        targetType.getName(), invalidValue, allowedValues));
+                problem.setProperty("timestamp", OffsetDateTime.now());
+                return problem;
+            }
+        }
+
+        // Fallback for other JSON parsing errors
+        ProblemDetail problem = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+        problem.setTitle("Bad Request");
+        problem.setDetail("Invalid request body.");
+        problem.setProperty("timestamp", OffsetDateTime.now());
         return problem;
     }
 

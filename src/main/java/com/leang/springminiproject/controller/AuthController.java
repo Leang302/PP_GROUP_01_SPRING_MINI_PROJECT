@@ -8,6 +8,7 @@ import com.leang.springminiproject.model.response.ApiResponse;
 import com.leang.springminiproject.model.response.AuthResponse;
 import com.leang.springminiproject.service.AppUserService;
 import com.leang.springminiproject.service.OtpService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -39,6 +40,7 @@ public class AuthController {
         }
     }
 
+    @Operation(summary = "User login")
     @PostMapping("/login")
     public ResponseEntity<?> authenticate(@RequestBody @Valid AuthRequest request) throws Exception {
         authenticate(request.getIdentifier(), request.getPassword());
@@ -54,11 +56,13 @@ public class AuthController {
         );
     }
 
+    @Operation(summary = "Register a new user")
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid AppUserRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.builder().success(true).message("User registered successfully").status(HttpStatus.CREATED).payload(appUserService.register(request)).build());
     }
 
+    @Operation(summary = "Verify email with OTP")
     @PostMapping("/verify")
     public ResponseEntity<?> verifyEmailWithOTP(@RequestParam String email, @RequestParam String otp) {
         emailService.verifyOTP(email, otp);
@@ -66,6 +70,7 @@ public class AuthController {
                 .status(HttpStatus.CREATED).build());
     }
 
+    @Operation(summary = "Resend verification OTP")
     @SneakyThrows
     @PostMapping("/resend")
     public ResponseEntity<?> resendOTP(@RequestParam String email) {

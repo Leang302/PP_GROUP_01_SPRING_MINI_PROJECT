@@ -2,13 +2,11 @@ package com.leang.springminiproject.controller;
 
 import com.leang.springminiproject.model.entity.Achievement;
 import com.leang.springminiproject.model.response.ApiResponse;
-import com.leang.springminiproject.repository.AchievementRepository;
 import com.leang.springminiproject.service.AchievementService;
-import com.leang.springminiproject.service.ProfileService;
 import com.leang.springminiproject.util.AuthenticationUtil;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.constraints.Positive;
-import jdk.jshell.execution.Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +22,7 @@ import java.util.List;
 public class AchievementController {
     private final AchievementService achievementService;
 
+    @Operation(summary = "Get all achievements")
     @GetMapping
     public ResponseEntity<ApiResponse<List<Achievement>>> getAllAchievements(@RequestParam(defaultValue = "1") @Positive Integer page, @RequestParam(defaultValue = "10") @Positive Integer size) {
         return ResponseEntity.ok().body(
@@ -36,6 +35,7 @@ public class AchievementController {
         );
     }
 
+    @Operation(summary = "Get Get achievement by App User ID")
     @GetMapping("app-users")
     public ResponseEntity<ApiResponse<List<Achievement>>> getCurrentUserAchievements(@RequestParam(defaultValue = "1") @Positive Integer page, @RequestParam(defaultValue = "10") @Positive Integer size) {
 

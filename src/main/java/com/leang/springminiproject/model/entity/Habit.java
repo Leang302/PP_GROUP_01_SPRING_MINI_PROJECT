@@ -1,9 +1,9 @@
 package com.leang.springminiproject.model.entity;
 
+import com.leang.springminiproject.model.enums.HabitFrequency;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.leang.springminiproject.model.response.AppUserResponse;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -15,7 +15,7 @@ public class Habit {
     private UUID habitId;
     private String title;
     private String description;
-    private String frequency;
+    private HabitFrequency frequency;
     private Boolean isActive;
     private Profile appUserResponse;
     private Instant createdAt;
