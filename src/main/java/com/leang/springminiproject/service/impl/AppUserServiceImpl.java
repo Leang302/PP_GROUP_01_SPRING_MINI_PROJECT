@@ -26,13 +26,26 @@ public class AppUserServiceImpl implements AppUserService {
     @Override
     public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
         AppUser userByIdentifier = appUserRepository.getUserByIdentifier(identifier);
-        if(userByIdentifier==null){
+        if (userByIdentifier == null) {
             throw new InvalidException("Invalid username, email, or password. Please check your credentials and try again.");
         }
         if (!userByIdentifier.getIsVerified()) {
             throw new NotVerifiedException("Your email address is not verified yet. Please verify your email before logging in.");
         }
-        return appUserRepository.getUserByIdentifier(identifier);
+        return userByIdentifier;
+    }
+
+    public UserDetails loadUserByUsername(String identifier, String password) throws UsernameNotFoundException {
+        AppUser userByIdentifier = appUserRepository.getUserByIdentifier(identifier);
+        if (userByIdentifier == null || !passwordEncoder.matches(password, userByIdentifier.getPassword())) {
+            throw new InvalidException("Invalid username, email, or password. Please check your credentials and try again.");
+        }
+
+
+        if (!userByIdentifier.getIsVerified()) {
+            throw new NotVerifiedException("Your email address is not verified yet. Please verify your email before logging in.");
+        }
+        return userByIdentifier;
     }
 
     @SneakyThrows

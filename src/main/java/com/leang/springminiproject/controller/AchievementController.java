@@ -28,7 +28,7 @@ public class AchievementController {
         return ResponseEntity.ok().body(
                 ApiResponse.<List<Achievement>>builder()
                         .success(true)
-                        .message("User profile updated successfully!")
+                        .message("Achievements retrieved successfully!")
                         .status(HttpStatus.OK)
                         .payload(achievementService.getAllAchievements(page, size))
                         .build()
@@ -41,7 +41,7 @@ public class AchievementController {
         return ResponseEntity.ok().body(
                 ApiResponse.<List<Achievement>>builder()
                         .success(true)
-                        .message("User profile updated successfully!")
+                        .message("Achievements for the specified App User retrieved successfully!")
                         .status(HttpStatus.OK)
                         .payload(achievementService.getAchievementsByUserId(page, size, AuthenticationUtil.getCurrentUserId()))
                         .build()

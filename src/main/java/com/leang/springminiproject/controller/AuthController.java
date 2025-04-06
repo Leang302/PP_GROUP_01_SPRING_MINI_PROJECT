@@ -43,8 +43,8 @@ public class AuthController {
     @Operation(summary = "User login")
     @PostMapping("/login")
     public ResponseEntity<?> authenticate(@RequestBody @Valid AuthRequest request) throws Exception {
+        final UserDetails userDetails = appUserService.loadUserByUsername(request.getIdentifier(), request.getPassword());
         authenticate(request.getIdentifier(), request.getPassword());
-        final UserDetails userDetails = appUserService.loadUserByUsername(request.getIdentifier());
         final String token = jwtService.generateToken(userDetails);
         AuthResponse authResponse = new AuthResponse(token);
         return ResponseEntity.ok().body(
