@@ -19,7 +19,7 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public class HabitLogImplService implements HabitLogService {
+public class HabitLogServiceImpl implements HabitLogService {
 
     private final HabitLogRepository habitLogRepository;
     private final HabitService habitService;
