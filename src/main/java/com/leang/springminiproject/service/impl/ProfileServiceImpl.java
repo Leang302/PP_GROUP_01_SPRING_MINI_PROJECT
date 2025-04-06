@@ -34,7 +34,7 @@ public class ProfileServiceImpl implements ProfileService {
         appUserRepository.deleteAppUser(userId);
     }
 
-    UUID getCurrentUserId() {
+     UUID getCurrentUserId() {
         AppUser appUser = (AppUser) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
         return appUser.getAppUserId();

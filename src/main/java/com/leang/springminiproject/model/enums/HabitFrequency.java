@@ -1,4 +1,5 @@
 package com.leang.springminiproject.model.enums;
 
-public enum HabbitFrequency {
+public enum HabitFrequency {
+     DAILY,WEEKLY,MONTHLY
 }
