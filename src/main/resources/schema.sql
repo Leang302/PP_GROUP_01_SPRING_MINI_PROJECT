@@ -33,7 +33,7 @@ create table if not exists habits
     title       varchar(255) not null,
     description varchar(255),
     frequency   varchar(50)  not null,
-    is_active   boolean      not null,
+    is_active   boolean     default true,
     app_user_id uuid      not null references app_users (app_user_id) on update cascade on delete cascade ,
     created_at   timestamptz default now()
 );
@@ -45,6 +45,5 @@ create table if not exists habit_logs
     xp_earned   integer  not null,
     habit_id uuid not null references habits(habit_id)
 );
-
 
 
