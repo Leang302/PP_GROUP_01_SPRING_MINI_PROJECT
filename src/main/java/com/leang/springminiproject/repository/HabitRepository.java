@@ -26,7 +26,6 @@ public interface HabitRepository {
             """)
     List<Habit> getAllHabit(Integer offset, Integer size, UUID userId);
 
-
     @ResultMap("habitMapper")
     @Select("""
         INSERT INTO habits VALUES (default,#{req.title},#{req.description},#{req.frequency},default,#{userId},default)
@@ -57,4 +56,5 @@ public interface HabitRepository {
         WHERE habit_id = #{habitId} AND app_user_id = #{userId}
     """)
     void deleteHabitById(UUID habitId, UUID userId);
+
 }

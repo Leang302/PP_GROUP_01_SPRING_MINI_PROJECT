@@ -21,4 +21,6 @@ public interface AchievementRepository {
              select * from app_user_achievements auc inner join achievements a on auc.achievement_id = a.achievement_id where app_user_id=#{userId} OFFSET (#{page}-1) *#{size} limit #{size}  ;
             """)
     List<Achievement> getAchievementsByUserId(Integer page, Integer size, UUID userId);
+
+
 }

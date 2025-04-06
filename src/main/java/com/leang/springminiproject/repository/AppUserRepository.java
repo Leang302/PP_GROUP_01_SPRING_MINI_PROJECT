@@ -58,4 +58,6 @@ public interface AppUserRepository {
                 delete from  app_users where app_user_id=#{userId};
             """)
     void deleteAppUser(@Param("userId") UUID userId);
+
+    Profile updateUserLevelAndXpById(UUID userId, Integer level, int totalXp);
 }

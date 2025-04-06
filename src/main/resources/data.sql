@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+INSERT INTO habits VALUES (default,'String','String', 'DAILY','true','5afdd9ce-0a3e-4db9-8b8d-88f1a22da995','2025-04-05 08:45:08.190585 +00:00');
+=======
 INSERT INTO achievements (title, description, badge, xp_required)
 VALUES ('First Habit Completed', 'Awarded when a user completes their first habit.', 'first_habit_badge.png', 50),
        ('7-Day Streak', 'Awarded for completing a habit for 7 consecutive days.', '7_day_streak_badge.png', 100),
@@ -21,3 +24,5 @@ VALUES ('First Habit Completed', 'Awarded when a user completes their first habi
        ('7-Day Streak Achievement', 'Awarded when a user completes a habit for 7 consecutive days.',
         '7_day_streak_achievement.png', 50),
        ('Level 10 Reached', 'Awarded when a user reaches level 10.', 'level_10_badge.png', 1000);
+>>>>>>> 26058dbd15dac0e3781de81a2be23e4c4729e3da
+
