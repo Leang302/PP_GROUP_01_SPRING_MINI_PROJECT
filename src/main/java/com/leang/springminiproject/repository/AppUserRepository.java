@@ -59,5 +59,9 @@ public interface AppUserRepository {
             """)
     void deleteAppUser(@Param("userId") UUID userId);
 
+    @ResultMap("profileMapper")
+    @Select("""
+                UPDATE  app_users set level=#{level},xp=#{totalXp} where app_user_id=#{userId} returning *;
+            """)
     Profile updateUserLevelAndXpById(UUID userId, Integer level, int totalXp);
 }

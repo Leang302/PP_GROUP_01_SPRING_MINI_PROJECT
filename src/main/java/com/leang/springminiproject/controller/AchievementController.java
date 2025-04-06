@@ -38,7 +38,6 @@ public class AchievementController {
     @Operation(summary = "Get Get achievement by App User ID")
     @GetMapping("app-users")
     public ResponseEntity<ApiResponse<List<Achievement>>> getCurrentUserAchievements(@RequestParam(defaultValue = "1") @Positive Integer page, @RequestParam(defaultValue = "10") @Positive Integer size) {
-
         return ResponseEntity.ok().body(
                 ApiResponse.<List<Achievement>>builder()
                         .success(true)

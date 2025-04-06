@@ -11,10 +11,10 @@ import java.util.UUID;
 @Mapper
 public interface HabitLogRepository {
 
-    @Results(id = "HabitLogMapper", value = {
-            @Result(property = "habitLogId",column = "habit_log_id"),
-            @Result(property = "logDate",column = "log_date"),
-            @Result(property = "xpEarned",column = "xp_earned"),
+    @Results(id = "habitLogMapper", value = {
+            @Result(property = "habitLogId", column = "habit_log_id"),
+            @Result(property = "logDate", column = "log_date"),
+            @Result(property = "xpEarned", column = "xp_earned"),
             @Result(property = "habit", column = "{habitId=habit_id, userId=app_user_id}", one = @One(select = "com.leang.springminiproject.repository.HabitRepository.getHabitById"))
     })
 
@@ -29,7 +29,7 @@ public interface HabitLogRepository {
     @Select("""
                     insert into habit_logs values (default,default,#{request.status},#{xpEarned},#{request.habitId}) returning *;
             """)
-    HabitLog createHabitLog(HabitLogRequest habitLogRequest, Integer xpEarned);
+    HabitLog createHabitLog(@Param("request") HabitLogRequest habitLogRequest, Integer xpEarned);
 
     @ResultMap("habitLogMapper")
     @Select("""

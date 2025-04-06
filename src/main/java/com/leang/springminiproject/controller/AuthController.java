@@ -50,7 +50,7 @@ public class AuthController {
         return ResponseEntity.ok().body(
                 ApiResponse.builder().
                         success(true)
-                        .message("User registered successfully")
+                        .message("User login successfully")
                         .status(HttpStatus.OK)
                         .payload(authResponse).build()
         );

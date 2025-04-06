@@ -65,13 +65,4 @@ public class HabitServiceImpl implements HabitService {
         getHabitById(habitId);
         habitRepository.deleteHabitById(habitId, AuthenticationUtil.getCurrentUserId());
     }
-
-    @Override
-    public Habit getHabitById(UUID habitId) {
-        Habit habitById = habitRepository.getHabitById(habitId, AuthenticationUtil.getCurrentUserId());
-        if (habitById == null) {
-            throw new NotFoundException("Habit with id " + habitId + " not found.");
-        }
-        return habitById;
-    }
 }

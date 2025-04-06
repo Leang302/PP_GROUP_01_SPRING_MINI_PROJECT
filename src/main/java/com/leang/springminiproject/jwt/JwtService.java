@@ -49,8 +49,6 @@ public class JwtService {
             throw new IllegalArgumentException("Token is null or empty");
         }
         token = token.trim(); // Trim to remove any extra spaces
-
-        System.out.println("Parsing Token: " + token); // Log the token for debugging
         return Jwts.parser()
                 .verifyWith(getSignKey())
                 .build()

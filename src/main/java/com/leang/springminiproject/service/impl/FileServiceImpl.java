@@ -25,7 +25,6 @@ public class FileServiceImpl implements FileService {
     @SneakyThrows
     @Override
     public FileMetaData saveFile(MultipartFile file) {
-        System.out.println("ran");
         boolean bucketExits = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
 
         if (!bucketExits) {

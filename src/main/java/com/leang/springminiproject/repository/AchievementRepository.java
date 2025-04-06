@@ -22,5 +22,16 @@ public interface AchievementRepository {
             """)
     List<Achievement> getAchievementsByUserId(Integer page, Integer size, UUID userId);
 
+    @ResultMap("achievementMapper")
+    @Select("""
+                select * from achievements where xp_required<=#{xp};
+            """)
+    List<Achievement> getAllAchievementsByXpRequired(Integer xp);
+
+    @ResultMap("achievementMapper")
+    @Select("""
+             select * from app_user_achievements auc inner join achievements a on auc.achievement_id = a.achievement_id where app_user_id=#{userId} ;
+            """)
+    List<Achievement> getUserAchievements(UUID userId);
 
 }

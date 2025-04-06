@@ -1,9 +1,12 @@
 package com.leang.springminiproject.service.impl;
 
+import com.leang.springminiproject.model.entity.Achievement;
 import com.leang.springminiproject.model.entity.HabitLog;
 import com.leang.springminiproject.model.entity.Profile;
 import com.leang.springminiproject.model.enumration.Status;
 import com.leang.springminiproject.model.request.HabitLogRequest;
+import com.leang.springminiproject.repository.AchievementRepository;
+import com.leang.springminiproject.repository.AppUserAchievementRepository;
 import com.leang.springminiproject.repository.AppUserRepository;
 import com.leang.springminiproject.repository.HabitLogRepository;
 import com.leang.springminiproject.service.HabitLogService;
@@ -11,7 +14,6 @@ import com.leang.springminiproject.service.HabitService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,6 +24,8 @@ public class HabitLogImplService implements HabitLogService {
     private final HabitLogRepository habitLogRepository;
     private final HabitService habitService;
     private final AppUserRepository appUserRepository;
+    private final AppUserAchievementRepository appUserAchievementRepository;
+    private final AchievementRepository achievementRepository;
 
     @Override
     public HabitLog createHabitLog(HabitLogRequest habitLogRequest) {
@@ -40,10 +44,18 @@ public class HabitLogImplService implements HabitLogService {
 
         if (totalXp >= 200) {
             level = (int) (double) (totalXp / 100);
-            System.out.println("level:" + level);
             updatedProfile = appUserRepository.updateUserLevelAndXpById(userId, level, totalXp);
         }
         habitLogByLogId.getHabit().setAppUserResponse(updatedProfile);
+
+//        add achievement
+        List<Achievement> allAchievementsByXpRequired = achievementRepository.getAllAchievementsByXpRequired(totalXp);
+        List<Achievement> userAchievements = achievementRepository.getUserAchievements(userId);
+        for (Achievement achievement : allAchievementsByXpRequired) {
+            if (!userAchievements.contains(achievement)) {
+                appUserAchievementRepository.addUserAchievement(userId, achievement.getAchievementId());
+            }
+        }
         return habitLogByLogId;
     }
 
