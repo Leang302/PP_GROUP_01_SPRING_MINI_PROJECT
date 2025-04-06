@@ -1,6 +1,8 @@
 package com.leang.springminiproject.model.request;
 
 import com.leang.springminiproject.model.enums.Status;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,8 +15,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 public class HabitLogRequest {
-
+    @NotNull
     private Status status;
+    @NotNull
     private UUID habitId;
 
 }
