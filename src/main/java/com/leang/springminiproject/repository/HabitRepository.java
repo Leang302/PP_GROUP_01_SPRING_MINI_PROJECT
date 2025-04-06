@@ -56,5 +56,5 @@ public interface HabitRepository {
         DELETE FROM habits
         WHERE habit_id = #{habitId} AND app_user_id = #{userId}
     """)
-    Habit deleteHabitById(UUID habitId, UUID userId);
+    void deleteHabitById(UUID habitId, UUID userId);
 }

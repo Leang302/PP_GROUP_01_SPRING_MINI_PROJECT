@@ -16,5 +16,5 @@ public interface HabitService {
 
     Habit updateHabitById(UUID habitId, HabitRequest habitRequest);
 
-    Habit deleteHabitById(UUID habitId);
+    void deleteHabitById(UUID habitId);
 }

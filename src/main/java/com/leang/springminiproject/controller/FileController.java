@@ -3,6 +3,7 @@ package com.leang.springminiproject.controller;
 import com.leang.springminiproject.model.entity.FileMetaData;
 import com.leang.springminiproject.model.response.ApiResponse;
 import com.leang.springminiproject.service.FileService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,33 +20,35 @@ import java.time.Instant;
 @RequestMapping("/api/v1/files")
 @RequiredArgsConstructor
 public class FileController {
-	private final FileService fileService;
+    private final FileService fileService;
 
-	@PostMapping(value = "/upload-file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<ApiResponse<FileMetaData>> uploadFile(@RequestParam MultipartFile file){
-		FileMetaData fileMetaData = fileService.saveFile(file);
-		ApiResponse<FileMetaData> response = ApiResponse.<FileMetaData>builder()
-				.success(true)
-				.message("File uploaded successfully")
-				.status(HttpStatus.CREATED)
-				.payload(fileMetaData)
-				.timestamps(Instant.now())
-				.build();
-		return ResponseEntity.ok(response);
-	}
+    @Operation(summary = "Upload a file")
+    @PostMapping(value = "/upload-file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse<FileMetaData>> uploadFile(@RequestParam MultipartFile file) {
+        FileMetaData fileMetaData = fileService.saveFile(file);
+        ApiResponse<FileMetaData> response = ApiResponse.<FileMetaData>builder()
+                .success(true)
+                .message("File uploaded successfully")
+                .status(HttpStatus.CREATED)
+                .payload(fileMetaData)
+                .timestamps(Instant.now())
+                .build();
+        return ResponseEntity.ok(response);
+    }
 
-	@GetMapping("/preview-file/{file-name}")
-	public ResponseEntity<?> getFileByFileName(@PathVariable("file-name") String fileName) throws IOException {
-		InputStream inputStream = fileService.getFileByFileName(fileName);
-		String contentType = URLConnection.guessContentTypeFromName(fileName);
+    @Operation(summary = "Preview a file")
+    @GetMapping("/preview-file/{file-name}")
+    public ResponseEntity<?> getFileByFileName(@PathVariable("file-name") String fileName) throws IOException {
+        InputStream inputStream = fileService.getFileByFileName(fileName);
+        String contentType = URLConnection.guessContentTypeFromName(fileName);
 
-		if (contentType == null) {
-			contentType = "application/octet-stream";
-		}
+        if (contentType == null) {
+            contentType = "application/octet-stream";
+        }
 
-		return ResponseEntity.status(HttpStatus.OK)
-				.contentType(MediaType.parseMediaType(contentType))
-				.body(inputStream.readAllBytes());
-	}
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.parseMediaType(contentType))
+                .body(inputStream.readAllBytes());
+    }
 
 }
