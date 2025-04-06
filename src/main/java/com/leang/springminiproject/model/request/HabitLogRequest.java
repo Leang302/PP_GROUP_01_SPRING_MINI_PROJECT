@@ -1,16 +1,20 @@
 package com.leang.springminiproject.model.request;
 
+import com.leang.springminiproject.model.enumration.Status;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class HabitLogRequest {
-    private String status = "COMPLETED";
+
+    private Status status;
     private UUID habitId;
+
 }

@@ -40,8 +40,11 @@ create table if not exists habits
 create table if not exists habit_logs
 (
     habit_log_id    uuid primary key DEFAULT uuid_generate_v4(),
-    log_date       date not null,
-    status boolean not null ,
+    log_date       date not null DEFAULT now(),
+    status varchar(100) not null ,
     xp_earned   integer  not null,
     habit_id uuid not null references habits(habit_id)
 );
+
+
+
