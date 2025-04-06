@@ -1,6 +1,6 @@
 package com.leang.springminiproject.model.request;
 
-import com.leang.springminiproject.model.enumration.Status;
+import com.leang.springminiproject.model.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

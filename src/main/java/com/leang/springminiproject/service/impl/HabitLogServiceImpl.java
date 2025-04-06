@@ -3,7 +3,7 @@ package com.leang.springminiproject.service.impl;
 import com.leang.springminiproject.model.entity.Achievement;
 import com.leang.springminiproject.model.entity.HabitLog;
 import com.leang.springminiproject.model.entity.Profile;
-import com.leang.springminiproject.model.enumration.Status;
+import com.leang.springminiproject.model.enums.Status;
 import com.leang.springminiproject.model.request.HabitLogRequest;
 import com.leang.springminiproject.repository.AchievementRepository;
 import com.leang.springminiproject.repository.AppUserAchievementRepository;
